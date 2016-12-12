@@ -31,6 +31,7 @@ public class Main {
 		for(WebElement link : links)
 			if (!link.getText().equals(""))
 		    System.out.println(link.getText());
+		
 	}
 
 }
