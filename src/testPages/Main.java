@@ -35,9 +35,9 @@ public class Main {
 		// values.add("email");
 		// values.add("Email");
 		values.add("buscar");
-		// values.add("iniciar");
+		values.add("iniciar");
 		// values.add("Iniciar");
-		// values.add("login");
+		values.add("login");
 		// values.add("Login");
 		// values.add("registro");
 		// values.add("Registro");
@@ -54,17 +54,22 @@ public class Main {
 	public static void findElements(List<String> values) {
 
 		for (String v : values) {
+			System.out.println("-------------------" + v + "---------------------------");
 			List<WebElement> links = driver.findElements(By.cssSelector("*"));
-			//List<WebElement> links2 = driver.findElements(By.xpath("//*[contains(text(), '"+v+"')]"));
-		    List<WebElement> links2 = driver.findElements(By.xpath("//*[text()[contains(translate(.,'B','b'),'"+v+"')]]"));
+			// List<WebElement> links2 =
+			// driver.findElements(By.xpath("//*[contains(text(), '"+v+"')]"));
+			List<WebElement> links2 = driver.findElements(By
+					.xpath("//*[text()[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'"
+							+ v + "')]]"));
 			// System.out.println("Elements on links2 = " + links2.size());
 			boolean anything = false;
-			System.out.println("Searching attributtes for '" + v + "'...");
+			System.out.println("Searching attributes...");
 
 			for (WebElement link : links) {
 				for (String a : attrs) {
 					if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
 						if (link.getAttribute(a).toLowerCase().contains(v.toLowerCase())) {
+
 							System.out.print("      " + a + ": ");
 							System.out.print(link.getAttribute(a));
 							System.out.print(" --> Id: ");
@@ -79,17 +84,23 @@ public class Main {
 
 			// if (anything == false) {
 			// System.out.println("No matching attributes for '" + v + "'.");
-			System.out.println("Searching elements contains text '" + v + "'.");
+			System.out.println("Searching elements with text...");
 			boolean contains = false;
 			int cont = 1;
 			for (WebElement link : links2) {
-				//System.out.println("Element " + cont);
+				// System.out.println("Element " + cont);
+				boolean goOut = false;
 				for (String a : attrs) {
-					if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
+					if (link.getAttribute(a) != null && !link.getAttribute(a).equals("") && !goOut
+							&& link.getText() != null && !link.getText().equals("")) {
+						if (a.equals("id"))
+							goOut = true;
 						System.out.print("      " + a + ": ");
-						System.out.println(link.getAttribute(a));
+						System.out.print(link.getAttribute(a));
 						contains = true;
-
+						System.out.print(" --> TEXT: ");
+						System.out.println(link.getText());
+						System.out.println("*************");
 					}
 				}
 				++cont;
@@ -98,9 +109,8 @@ public class Main {
 				System.out.println("No matching elements for '" + v + "'.");
 			// }
 
-			System.out.println("---------------------------------------");
-
 		}
+		System.out.println("----------------------------------------------");
 		System.out.println("Process finished");
 	}
 }
