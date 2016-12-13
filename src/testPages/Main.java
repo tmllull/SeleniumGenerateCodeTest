@@ -34,7 +34,7 @@ public class Main {
 		attrs.add("value");
 		// values.add("email");
 		// values.add("Email");
-		values.add("Buscar");
+		values.add("buscar");
 		// values.add("iniciar");
 		// values.add("Iniciar");
 		// values.add("login");
@@ -56,7 +56,7 @@ public class Main {
 		for (String v : values) {
 			List<WebElement> links = driver.findElements(By.cssSelector("*"));
 			//List<WebElement> links2 = driver.findElements(By.xpath("//*[contains(text(), '"+v+"')]"));
-		    List<WebElement> links2 = driver.findElements(By.xpath("//*[text()[contains(.,'"+v+"')]]"));
+		    List<WebElement> links2 = driver.findElements(By.xpath("//*[text()[contains(translate(.,'B','b'),'"+v+"')]]"));
 			// System.out.println("Elements on links2 = " + links2.size());
 			boolean anything = false;
 			System.out.println("Searching attributtes for '" + v + "'...");
@@ -64,7 +64,7 @@ public class Main {
 			for (WebElement link : links) {
 				for (String a : attrs) {
 					if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
-						if (link.getAttribute(a).contains(v)) {
+						if (link.getAttribute(a).toLowerCase().contains(v.toLowerCase())) {
 							System.out.print("      " + a + ": ");
 							System.out.print(link.getAttribute(a));
 							System.out.print(" --> Id: ");
