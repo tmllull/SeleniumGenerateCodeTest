@@ -25,63 +25,82 @@ public class Main {
 		options.addArguments("--start-maximized", "-incognito");
 		driver = new ChromeDriver(options);
 		wait = new WebDriverWait(driver, 30);
-		driver.get(
-				"https://accounts.google.com/ServiceLogin?hl=es&passive=true&continue=https://www.google.es/%3Fgws_rd%3Dssl#identifier");
+		driver.get("https://www.google.es/");
 		attrs.add("id");
 		attrs.add("class");
 		attrs.add("name");
 		attrs.add("placeholder");
 		attrs.add("type");
 		attrs.add("value");
-		findElements("dhdgssdg");
+		// values.add("email");
+		// values.add("Email");
+		values.add("Buscar");
+		// values.add("iniciar");
+		// values.add("Iniciar");
+		// values.add("login");
+		// values.add("Login");
+		// values.add("registro");
+		// values.add("Registro");
+		findElements(values);
 	}
 
-	public static void findElements(String text) {
+	/**
+	 * Funció que cerca a tota la pàgina els elements que contenen el text
+	 * "text" o que el tenen com atribut. En cas de trobar-ne algun, retorna
+	 * quin atribut conté aquest text i el seu id, si en té.
+	 * 
+	 * @param text
+	 */
+	public static void findElements(List<String> values) {
 
-		// List<WebElement> links =
-		// driver.findElements(By.xpath("//*[contains(text(), '" + text +
-		// "')]"));
-		// List<WebElement> links =
-		// driver.findElements(By.xpath("//*[contains(text(), '" + text +
-		// "')]"));
-		List<WebElement> links = driver.findElements(By.cssSelector("*"));
-		boolean anything = false;
-		System.out.println("Searching attributtes for " + text + "...");
-		for (WebElement link : links) {
-			for (String a : attrs) {
-				if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
-					if (link.getAttribute(a).equals(text)) {
-						System.out.print(a + ": ");
-						System.out.println(link.getAttribute(a));
-						anything = true;
-					}
-				}
-			}
+		for (String v : values) {
+			List<WebElement> links = driver.findElements(By.cssSelector("*"));
+			//List<WebElement> links2 = driver.findElements(By.xpath("//*[contains(text(), '"+v+"')]"));
+		    List<WebElement> links2 = driver.findElements(By.xpath("//*[text()[contains(.,'"+v+"')]]"));
+			// System.out.println("Elements on links2 = " + links2.size());
+			boolean anything = false;
+			System.out.println("Searching attributtes for '" + v + "'...");
 
-		}
-		if (anything == false) {
-			System.out.println("No matching attributes for " + text + ".");
-			System.out.println("Searching elements contains text " + text + ".");
-			boolean contains = false;
-			links = driver.findElements(By.xpath("//*[contains(text(), '" + text + "')]"));
 			for (WebElement link : links) {
 				for (String a : attrs) {
 					if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
-						if (link.getAttribute(a).equals(text)) {
-							System.out.print(a + ": ");
-							System.out.println(link.getAttribute(a));
-							contains = true;
+						if (link.getAttribute(a).contains(v)) {
+							System.out.print("      " + a + ": ");
+							System.out.print(link.getAttribute(a));
+							System.out.print(" --> Id: ");
+							if (link.getAttribute("id") != null)
+								System.out.println(link.getAttribute("id"));
+							anything = true;
 						}
 					}
 				}
 
 			}
-			if (contains == false)
-				System.out.println("No matching elements for " + text + ".");
+
+			// if (anything == false) {
+			// System.out.println("No matching attributes for '" + v + "'.");
+			System.out.println("Searching elements contains text '" + v + "'.");
+			boolean contains = false;
+			int cont = 1;
+			for (WebElement link : links2) {
+				//System.out.println("Element " + cont);
+				for (String a : attrs) {
+					if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
+						System.out.print("      " + a + ": ");
+						System.out.println(link.getAttribute(a));
+						contains = true;
+
+					}
+				}
+				++cont;
+			}
+			if (contains == false && anything == false)
+				System.out.println("No matching elements for '" + v + "'.");
+			// }
+
+			System.out.println("---------------------------------------");
+
 		}
-
 		System.out.println("Process finished");
-
 	}
-
 }
