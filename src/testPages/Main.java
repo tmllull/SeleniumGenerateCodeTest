@@ -49,8 +49,6 @@ public class Main {
 		System.out.println("Searching attributtes for " + text + "...");
 		for (WebElement link : links) {
 			for (String a : attrs) {
-				// System.out.println(a);
-				// System.out.println(link.getAttribute("id"));
 				if (link.getAttribute(a) != null && !link.getAttribute(a).equals("")) {
 					if (link.getAttribute(a).equals(text)) {
 						System.out.print(a + ": ");
